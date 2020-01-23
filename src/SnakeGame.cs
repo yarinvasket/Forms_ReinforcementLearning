@@ -8,6 +8,8 @@ namespace Reinforcement
 {
     class SnakeGame : Game
     {
+
+
         public int GetInputAmount()
         {
             throw new NotImplementedException();
@@ -32,5 +34,10 @@ namespace Reinforcement
         {
             throw new NotImplementedException();
         }
+    }
+
+    public enum Block
+    {
+        Snake, Blank, Food
     }
 }
