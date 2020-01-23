@@ -1,20 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Reinforcement
 {
-    public partial class SnakeGame : Form
+    class SnakeGame : Game
     {
-        public SnakeGame()
+        public int GetInputAmount()
         {
-            InitializeComponent();
+            throw new NotImplementedException();
+        }
+
+        public int GetOutputAmount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public float GetScore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEnd()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Tick()
+        {
+            throw new NotImplementedException();
         }
     }
 }
