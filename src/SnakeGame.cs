@@ -8,7 +8,22 @@ namespace Reinforcement
 {
     class SnakeGame : Game
     {
+        private Block[,] board;
+        private int foodDuration;
+        private LinkedList<int> snake;
+        private bool isEnd;
 
+        public SnakeGame(int height, int width)
+        {
+            board = new Block[height, width];
+            foodDuration = 0;
+            snake = new LinkedList<int>();
+        }
+
+        public void GetInput()
+        {
+            throw new NotImplementedException();
+        }
 
         public int GetInputAmount()
         {
@@ -17,7 +32,7 @@ namespace Reinforcement
 
         public int GetOutputAmount()
         {
-            throw new NotImplementedException();
+            return 3;
         }
 
         public float GetScore()
@@ -26,6 +41,11 @@ namespace Reinforcement
         }
 
         public bool IsEnd()
+        {
+            return isEnd;
+        }
+
+        public float[] SetOutput()
         {
             throw new NotImplementedException();
         }
