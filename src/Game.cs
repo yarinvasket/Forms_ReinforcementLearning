@@ -13,5 +13,7 @@ namespace Reinforcement
         int GetOutputAmount();
         float GetScore();
         bool IsEnd();
+        float[] SetOutput();
+        void GetInput();
     }
 }
