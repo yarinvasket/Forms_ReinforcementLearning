@@ -8,16 +8,45 @@ namespace Reinforcement
 {
     class SnakeGame : Game
     {
+        private int height, width;
         private Block[,] board;
+        private LinkedList<SPoint> snake;
+        private HashSet<SPoint> spaces;
         private int foodDuration;
-        private LinkedList<int> snake;
         private bool isEnd;
 
         public SnakeGame(int height, int width)
         {
+            this.height = height;
+            this.width = width;
             board = new Block[height, width];
+            spaces = new HashSet<SPoint>();
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    board[i, j] = Block.Blank;
+                    spaces.Add(new SPoint(j, i));
+                }
+            }
+
+            SPoint foodLoc = new SPoint(Manager.random.Next(0, height), Manager.random.Next(0, width));
+            board[foodLoc.y, foodLoc.x] = Block.Food;
+            spaces.Remove(foodLoc);
+
+            SPoint snakeLoc = spaces.ToArray()[Manager.random.Next(0, spaces.Count)];
+            board[snakeLoc.y, snakeLoc.x] = Block.Snake;
+            spaces.Remove(snakeLoc);
+            snake = new LinkedList<SPoint>();
+            snake.AddLast(snakeLoc);
+
             foodDuration = 0;
-            snake = new LinkedList<int>();
+        }
+
+        public Block[,] GetBoard()
+        {
+            return board;
         }
 
         public void GetInput()
@@ -35,9 +64,9 @@ namespace Reinforcement
             return 3;
         }
 
-        public float GetScore()
+        public int GetScore()
         {
-            throw new NotImplementedException();
+            return snake.Count;
         }
 
         public bool IsEnd()
@@ -50,9 +79,12 @@ namespace Reinforcement
             throw new NotImplementedException();
         }
 
-        public void Tick()
+        public void Tick(float[] input)
         {
-            throw new NotImplementedException();
+            LinkedListNode<SPoint> last = snake.Last;
+
+            int dx = last.Value.x - last.Previous.Value.x;
+            int dy = last.Value.y - last.Previous.Value.y;
         }
     }
 

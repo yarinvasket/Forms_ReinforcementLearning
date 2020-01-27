@@ -8,10 +8,10 @@ namespace Reinforcement
 {
     interface Game
     {
-        void Tick();
+        void Tick(float[] input);
         int GetInputAmount();
         int GetOutputAmount();
-        float GetScore();
+        int GetScore();
         bool IsEnd();
         float[] SetOutput();
         void GetInput();

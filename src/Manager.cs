@@ -21,6 +21,8 @@ namespace Reinforcement
         {
             this.BackColor = Color.FromName("Black");
             this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
+            SnakeGame game = new SnakeGame(height, width);
+            Block[,] blocks = game.GetBoard();
 
             for (int i = 0; i < height; i++)
             {
@@ -29,7 +31,7 @@ namespace Reinforcement
                 {
                     Label tmp = new Label();
                     tmp.Location = new Point(j * blockSize, i * blockSize);
-                    tmp.BackColor = Color.FromArgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
+                    tmp.BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Red") : Color.FromName("White");
                     //tmp.Text = i + ", " + j;
                     tmp.Size = new Size(blockSize, blockSize);
                     board[i][j] = tmp;
