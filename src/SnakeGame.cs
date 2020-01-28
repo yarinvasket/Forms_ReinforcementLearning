@@ -137,12 +137,12 @@ namespace Reinforcement
 
             int newX = last.Value.x + dx;
             int newY = last.Value.y + dy;
-            Block block = board[newY, newX];
             if (newX >= width || newY >= height)
             {
                 isEnd = true;
                 return;
             }
+            Block block = board[newY, newX];
             if (block == Block.Snake)
             {
                 isEnd = true;
@@ -160,9 +160,9 @@ namespace Reinforcement
             {
                 if (foodDuration <= 0)
                 {
-                    SPoint tail = snake.Last.Value;
+                    SPoint tail = snake.First.Value;
                     board[tail.y, tail.x] = Block.Blank;
-                    snake.RemoveLast();
+                    snake.RemoveFirst();
                 }
                 else
                 {
