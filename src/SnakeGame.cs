@@ -20,7 +20,7 @@ namespace Reinforcement
             this.height = height;
             this.width = width;
             board = new Block[height, width];
-            HashSet<SPoint> spaces = new HashSet<SPoint>();
+            List<SPoint> spaces = new List<SPoint>();
 
             for (int i = 0; i < height; i++)
             {
@@ -51,7 +51,7 @@ namespace Reinforcement
                 }
             }
 
-            SPoint snakeLoc = spaces.ToArray()[Manager.random.Next(0, spaces.Count)];
+            SPoint snakeLoc = spaces[Manager.random.Next(0, spaces.Count)];
             SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
             if (!spaces.Contains(leftSnake))
                 leftSnake = new SPoint(snakeLoc.x + 1, snakeLoc.y);
@@ -137,7 +137,7 @@ namespace Reinforcement
 
             int newX = last.Value.x + dx;
             int newY = last.Value.y + dy;
-            if (newX >= width || newY >= height)
+            if (newX >= width || newY >= height || newX < 0 || newY < 0)
             {
                 isEnd = true;
                 return;
@@ -155,6 +155,16 @@ namespace Reinforcement
             {
                 foodDuration += 2;
                 starve += 100;
+                List<SPoint> spaces = new List<SPoint>();
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        if (board[i, j] == Block.Blank) spaces.Add(new SPoint(j, i));
+                    }
+                }
+                SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
+                board[foodPoint.y, foodPoint.x] = Block.Food;
             }
             else
             {

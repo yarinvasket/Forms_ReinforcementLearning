@@ -46,6 +46,7 @@ namespace Reinforcement
                 buttons[i] = new Button();
                 buttons[i].Location = new Point(i * blockSize * 2, width * blockSize);
                 buttons[i].Size = new Size(blockSize * 2, blockSize);
+                buttons[i].BackColor = Color.FromName("White");
                 buttons[i].Tag = i;
                 buttons[i].Click += buttonClick;
                 Controls.Add(buttons[i]);
