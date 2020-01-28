@@ -12,6 +12,7 @@ namespace Reinforcement
         private Block[,] board;
         private LinkedList<SPoint> snake;
         private int foodDuration;
+        private int starve;
         private bool isEnd;
 
         public SnakeGame(int height, int width)
@@ -64,6 +65,7 @@ namespace Reinforcement
             isEnd = false;
 
             foodDuration = 0;
+            starve = 150;
         }
 
         public Block[,] GetBoard()
@@ -131,6 +133,47 @@ namespace Reinforcement
                 int temp = -dy;
                 dy = dx;
                 dx = temp;
+            }
+
+            int newX = last.Value.x + dx;
+            int newY = last.Value.y + dy;
+            Block block = board[newY, newX];
+            if (newX >= width || newY >= height)
+            {
+                isEnd = true;
+                return;
+            }
+            if (block == Block.Snake)
+            {
+                isEnd = true;
+                return;
+            }
+
+            board[newY, newX] = Block.Snake;
+            snake.AddLast(new SPoint(newX, newY));
+            if (block == Block.Food)
+            {
+                foodDuration += 2;
+                starve += 100;
+            }
+            else
+            {
+                if (foodDuration <= 0)
+                {
+                    SPoint tail = snake.Last.Value;
+                    board[tail.y, tail.x] = Block.Blank;
+                    snake.RemoveLast();
+                }
+                else
+                {
+                    foodDuration--;
+                }
+                starve--;
+                if (starve <= 0)
+                {
+                    isEnd = true;
+                    return;
+                }
             }
         }
     }
