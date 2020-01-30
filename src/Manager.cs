@@ -17,6 +17,7 @@ namespace Reinforcement
         private Label[][] board = new Label[height][];
         public static Random random = new Random();
         private SnakeGame game = new SnakeGame(height, width);
+        private bool areCheatsEnabled;
 
         public Manager()
         {
@@ -24,6 +25,7 @@ namespace Reinforcement
             this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
             this.Text = "Snake";
             Block[,] blocks = game.GetBoard();
+            areCheatsEnabled = false;
 
             for (int i = 0; i < height; i++)
             {
@@ -35,6 +37,8 @@ namespace Reinforcement
                     tmp.BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
                     //tmp.Text = i + ", " + j;
                     tmp.Size = new Size(blockSize, blockSize);
+                    tmp.Tag = new SPoint(j, i);
+                    tmp.Click += LabelClick;
                     board[i][j] = tmp;
                     Controls.Add(tmp);
                 }
@@ -54,6 +58,14 @@ namespace Reinforcement
             buttons[0].Text = "Up";
             buttons[1].Text = "Left";
             buttons[2].Text = "Right";
+
+            Button toggleCheats = new Button();
+            toggleCheats.Location = new Point(6 * blockSize, width * blockSize);
+            toggleCheats.Size = new Size(blockSize * 2, blockSize);
+            toggleCheats.BackColor = Color.FromName("White");
+            toggleCheats.Click += toggleCheat;
+            toggleCheats.Text = "Toggle Cheats";
+            Controls.Add(toggleCheats);
         }
 
         public void buttonClick(object sender, EventArgs e)
@@ -68,6 +80,12 @@ namespace Reinforcement
             input[active] = 1;
             game.Tick(input);
 
+            if (game.IsEnd() && !areCheatsEnabled)
+            {
+                MessageBox.Show("You lost!");
+                game = new SnakeGame(height, width);
+            }
+
             Block[,] blocks = game.GetBoard();
             for (int i = 0; i < height; i++)
             {
@@ -76,9 +94,30 @@ namespace Reinforcement
                     board[i][j].BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
                 }
             }
+        }
 
-            if (game.IsEnd())
-                MessageBox.Show("You lost!");
+        public void toggleCheat(object sender, EventArgs e)
+        {
+            areCheatsEnabled = !areCheatsEnabled;
+        }
+
+        public void LabelClick(object sender, EventArgs e)
+        {
+            if (areCheatsEnabled)
+            {
+                Label label = (Label)sender;
+                SPoint point = (SPoint)label.Tag;
+                Block[,] blocks = game.GetBoard();
+                Block block = blocks[point.y, point.x];
+                if (block == Block.Food)
+                {
+                    blocks[point.y, point.x] = Block.Snake;
+                }
+                else blocks[point.y, point.x]++;
+
+                block = blocks[point.y, point.x];
+                board[point.y][point.x].BackColor = block == Block.Blank ? Color.FromName("Black") : block == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+            }
         }
     }
 }
