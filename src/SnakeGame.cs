@@ -57,8 +57,6 @@ namespace Reinforcement
                 leftSnake = new SPoint(snakeLoc.x + 1, snakeLoc.y);
             board[snakeLoc.y, snakeLoc.x] = Block.Snake;
             board[leftSnake.y, leftSnake.x] = Block.Snake;
-            spaces.Remove(snakeLoc);
-            spaces.Remove(leftSnake);
             snake = new LinkedList<SPoint>();
             snake.AddLast(leftSnake);
             snake.AddLast(snakeLoc);

@@ -20,7 +20,7 @@ namespace Reinforcement
 
         public Manager()
         {
-            this.BackColor = Color.FromName("Black");
+            this.BackColor = Color.FromArgb(0, 0, 100);
             this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
             this.Text = "Snake";
             Block[,] blocks = game.GetBoard();
@@ -32,7 +32,7 @@ namespace Reinforcement
                 {
                     Label tmp = new Label();
                     tmp.Location = new Point(j * blockSize, i * blockSize);
-                    tmp.BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Gray") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+                    tmp.BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
                     //tmp.Text = i + ", " + j;
                     tmp.Size = new Size(blockSize, blockSize);
                     board[i][j] = tmp;
@@ -73,7 +73,7 @@ namespace Reinforcement
             {
                 for (int j = 0; j < width; j++)
                 {
-                    board[i][j].BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Gray") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+                    board[i][j].BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
                 }
             }
 
