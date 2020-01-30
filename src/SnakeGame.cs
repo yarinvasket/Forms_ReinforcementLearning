@@ -161,6 +161,11 @@ namespace Reinforcement
                         if (board[i, j] == Block.Blank) spaces.Add(new SPoint(j, i));
                     }
                 }
+                if (spaces.Count == 0)
+                {
+                    isEnd = true;
+                    return;
+                }
                 SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
                 board[foodPoint.y, foodPoint.x] = Block.Food;
             }
