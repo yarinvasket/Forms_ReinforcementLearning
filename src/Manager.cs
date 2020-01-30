@@ -34,7 +34,7 @@ namespace Reinforcement
                 {
                     Label tmp = new Label();
                     tmp.Location = new Point(j * blockSize, i * blockSize);
-                    tmp.BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+                    tmp.BackColor = GetBlockColor(blocks[i, j]);
                     //tmp.Text = i + ", " + j;
                     tmp.Size = new Size(blockSize, blockSize);
                     tmp.Tag = new SPoint(j, i);
@@ -91,7 +91,7 @@ namespace Reinforcement
             {
                 for (int j = 0; j < width; j++)
                 {
-                    board[i][j].BackColor = blocks[i, j] == Block.Blank ? Color.FromName("Black") : blocks[i, j] == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+                    board[i][j].BackColor = GetBlockColor(blocks[i, j]);
                 }
             }
         }
@@ -116,8 +116,13 @@ namespace Reinforcement
                 else blocks[point.y, point.x]++;
 
                 block = blocks[point.y, point.x];
-                board[point.y][point.x].BackColor = block == Block.Blank ? Color.FromName("Black") : block == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
+                board[point.y][point.x].BackColor = GetBlockColor(block);
             }
+        }
+
+        public Color GetBlockColor(Block block)
+        {
+            return block == Block.Blank ? Color.FromName("Black") : block == Block.Snake ? Color.FromName("White") : Color.FromName("Red");
         }
     }
 }
