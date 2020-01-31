@@ -21,41 +21,15 @@ namespace Reinforcement
             this.height = height;
             this.width = width;
             board = new Block[height, width];
-            List<SPoint> spaces = new List<SPoint>();
+            GenFood();
 
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    board[i, j] = Block.Blank;
-                    spaces.Add(new SPoint(j, i));
-                }
-            }
-
-            SPoint foodLoc = new SPoint(Manager.random.Next(0, height), Manager.random.Next(0, width));
-            board[foodLoc.y, foodLoc.x] = Block.Food;
-            spaces.Remove(foodLoc);
-
-            for (int i = 0; i < height; i++)
-            {
-                if (i == 0 || i == height - 1)
-                {
-                    for (int j = 0; j < width; j++)
-                    {
-                        spaces.Remove(new SPoint(j, i));
-                    }
-                }
-                else
-                {
-                    spaces.Remove(new SPoint(0, i));
-                    spaces.Remove(new SPoint(width - 1, i));
-                }
-            }
-
-            SPoint snakeLoc = spaces[Manager.random.Next(0, spaces.Count)];
+            SPoint snakeLoc = new SPoint(Manager.random.Next(1, width - 1), Manager.random.Next(1, height - 1));
             SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
-            if (!spaces.Contains(leftSnake))
-                leftSnake = new SPoint(snakeLoc.x + 1, snakeLoc.y);
+            if (board[snakeLoc.y, snakeLoc.x] == Block.Food || board[leftSnake.y, leftSnake.x] == Block.Blank)
+            {
+                snakeLoc.y--;
+                leftSnake.y--;
+            }
             board[snakeLoc.y, snakeLoc.x] = Block.Snake;
             board[leftSnake.y, leftSnake.x] = Block.Snake;
             snake = new LinkedList<SPoint>();
@@ -154,21 +128,7 @@ namespace Reinforcement
             {
                 foodDuration += 2;
                 starve += 100;
-                List<SPoint> spaces = new List<SPoint>();
-                for (int i = 0; i < height; i++)
-                {
-                    for (int j = 0; j < width; j++)
-                    {
-                        if (board[i, j] == Block.Blank) spaces.Add(new SPoint(j, i));
-                    }
-                }
-                if (spaces.Count == 0)
-                {
-                    isEnd = true;
-                    return;
-                }
-                SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
-                board[foodPoint.y, foodPoint.x] = Block.Food;
+                GenFood();
             }
             else
             {
@@ -190,10 +150,31 @@ namespace Reinforcement
                 }
             }
         }
+
+        public void GenFood()
+        {
+            List<SPoint> spaces = new List<SPoint>();
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (board[i, j] == Block.Blank) spaces.Add(new SPoint(j, i));
+                }
+            }
+
+            if (spaces.Count == 0)
+            {
+                isEnd = true;
+                return;
+            }
+            SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
+            board[foodPoint.y, foodPoint.x] = Block.Food;
+        }
     }
 
     public enum Block
     {
-        Snake, Blank, Food
+        Blank, Snake, Food
     }
 }

@@ -111,7 +111,7 @@ namespace Reinforcement
                 Block block = blocks[point.y, point.x];
                 if (block == Block.Food)
                 {
-                    blocks[point.y, point.x] = Block.Snake;
+                    blocks[point.y, point.x] = Block.Blank;
                 }
                 else blocks[point.y, point.x]++;
 
