@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Reinforcement
 {
+    [Serializable]
     class SnakeGame : Game
     {
         private int height, width;

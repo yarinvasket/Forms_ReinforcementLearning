@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Reinforcement
 {
+    [Serializable]
     class SPoint
     {
         public int x, y;
