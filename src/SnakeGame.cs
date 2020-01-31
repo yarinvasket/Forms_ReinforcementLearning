@@ -21,20 +21,17 @@ namespace Reinforcement
             this.height = height;
             this.width = width;
             board = new Block[height, width];
-            GenFood();
 
             SPoint snakeLoc = new SPoint(Manager.random.Next(1, width - 1), Manager.random.Next(1, height - 1));
             SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
-            if (board[snakeLoc.y, snakeLoc.x] == Block.Food || board[leftSnake.y, leftSnake.x] == Block.Blank)
-            {
-                snakeLoc.y--;
-                leftSnake.y--;
-            }
             board[snakeLoc.y, snakeLoc.x] = Block.Snake;
             board[leftSnake.y, leftSnake.x] = Block.Snake;
             snake = new LinkedList<SPoint>();
             snake.AddLast(leftSnake);
             snake.AddLast(snakeLoc);
+
+            GenFood();
+
             isEnd = false;
 
             foodDuration = 0;
