@@ -43,6 +43,16 @@ namespace Reinforcement
             return board;
         }
 
+        public SPoint[] GetDiff()
+        {
+            SPoint tail = snake.First.Value;
+            return new SPoint[] { snake.Last.Value,
+            new SPoint(tail.x - 1, tail.y),
+            new SPoint(tail.x + 1, tail.y),
+            new SPoint(tail.x, tail.y - 1),
+            new SPoint(tail.x, tail.y + 1)};
+        }
+
         public void GetInput()
         {
             throw new NotImplementedException();

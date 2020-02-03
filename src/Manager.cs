@@ -84,15 +84,23 @@ namespace Reinforcement
             {
                 MessageBox.Show("You lost!");
                 game = new SnakeGame(height, width);
+                Block[,] blocks = game.GetBoard();
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        board[i][j].BackColor = GetBlockColor(blocks[i, j]);
+                    }
+                }
+                return;
             }
 
-            Block[,] blocks = game.GetBoard();
-            for (int i = 0; i < height; i++)
+            SPoint[] diffs = game.GetDiff();
+            foreach (SPoint diff in diffs)
             {
-                for (int j = 0; j < width; j++)
-                {
-                    board[i][j].BackColor = GetBlockColor(blocks[i, j]);
-                }
+                if (diff.y >= height || diff.x >= width || diff.x < 0 || diff.y < 0)
+                    continue;
+                board[diff.y][diff.x].BackColor = GetBlockColor(game.GetBoard()[diff.y, diff.x]);
             }
         }
 
