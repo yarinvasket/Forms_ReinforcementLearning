@@ -15,9 +15,14 @@ namespace Reinforcement
     {
         public float[] connections;
 
-        InputNeuron(int length)
+        public InputNeuron(int length)
         {
             connections = new float[length];
+        }
+
+        public float GetWeight(int idx)
+        {
+            return value * connections[idx];
         }
     }
 
@@ -32,9 +37,14 @@ namespace Reinforcement
             this.bias = bias;
         }
 
-        void Sigmoid()
+        public void Sigmoid(float value)
         {
-            value = 1 / (1 + (float)Math.Exp(bias - value));
+            this.value = 1 / (1 + (float)Math.Exp(bias - value));
+        }
+
+        public float GetWeight(int idx)
+        {
+            return value * connections[idx];
         }
     }
 
@@ -47,9 +57,9 @@ namespace Reinforcement
             this.bias = bias;
         }
 
-        void Sigmoid()
+        public void Sigmoid(float value)
         {
-            value = 1 / (1 + (float)Math.Exp(bias - value));
+            this.value = 1 / (1 + (float)Math.Exp(bias - value));
         }
     }
 }
