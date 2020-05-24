@@ -12,6 +12,7 @@ namespace Reinforcement
         private int height, width;
         private Block[,] board;
         private LinkedList<SPoint> snake;
+        private int foodX, foodY;
         private int foodDuration;
         private int starve;
         private bool isEnd;
@@ -50,7 +51,8 @@ namespace Reinforcement
             new SPoint(tail.x - 1, tail.y),
             new SPoint(tail.x + 1, tail.y),
             new SPoint(tail.x, tail.y - 1),
-            new SPoint(tail.x, tail.y + 1)};
+            new SPoint(tail.x, tail.y + 1),
+            new SPoint(foodX, foodY)};
         }
 
         public void GetInput()
@@ -177,6 +179,8 @@ namespace Reinforcement
             }
             SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
             board[foodPoint.y, foodPoint.x] = Block.Food;
+            foodX = foodPoint.x;
+            foodY = foodPoint.y;
         }
     }
 
