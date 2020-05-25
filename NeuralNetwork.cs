@@ -209,7 +209,7 @@ namespace Reinforcement
         {
             scoreSum += score;
             scores++;
-            score = scoreSum / scores;
+            this.score = scoreSum / scores;
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Reinforcement
     {
         public int Compare(NeuralNetwork x, NeuralNetwork y)
         {
-            return x.score > y.score ? 1 : x.score < y.score ? -1 : 0;
+            return x.score > y.score ? -1 : x.score < y.score ? 1 : 0;
         }
     }
 }

@@ -16,5 +16,6 @@ namespace Reinforcement
         public abstract int GetScore();
         public abstract float[] SetOutput();
         public abstract void Reset();
+        public abstract Game GetNewGame();
     }
 }

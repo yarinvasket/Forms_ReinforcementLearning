@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reinforcement
@@ -9,8 +12,10 @@ namespace Reinforcement
     public class Population<T> where T : Game
     {
         private NeuralNetwork[] m_networks;
-        private T m_game;
+        private T[] m_games;
         private CompareNetworks comparer;
+        private Thread[] threads;
+        public const int CPUs = 4;
 
         public Population(int popSize, int[] layers, T game)
         {
@@ -19,29 +24,56 @@ namespace Reinforcement
             {
                 m_networks[i] = new NeuralNetwork(layers);
             }
-            m_game = game;
+            m_games = new T[CPUs];
+            for (int i = 0; i < CPUs; i++)
+            {
+                m_games[i] = (T)game.GetNewGame();
+            }
             comparer = new CompareNetworks();
+
+            threads = new Thread[CPUs];
+            int segmentSize = m_networks.Length / threads.Length;
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread((object o) =>
+                {
+                    int idx = (int)o;
+                    int start = idx * segmentSize;
+                    int dest = start + segmentSize;
+                    for (int j = start; j < dest; j++)
+                    {
+                        TestNetwork(j, idx);
+                    }
+                });
+            }
         }
 
         public void IncrementGeneration()
         {
             //Rate every neural network
-            for (int i = 0; i < m_networks.Length; i++)
+            for (int i = 0; i < threads.Length; i++)
             {
-                TestNetwork(i);
+                threads[i].Start(i);
             }
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i].Join();
+            }
+
+            //Sort the neural networks according to their average score
             Array.Sort(m_networks, comparer);
         }
 
-        public void TestNetwork(int idx)
+        public void TestNetwork(int idx, int cpu)
         {
-            m_game.Reset();
+            T game = m_games[cpu];
+            game.Reset();
 
-            while (!m_game.isEnd)
+            while (!game.isEnd)
             {
-                m_game.Tick(m_networks[idx].FeedForward(m_game.SetOutput()));
+                game.Tick(m_networks[idx].FeedForward(game.SetOutput()));
             }
-            m_networks[idx].AddScore(m_game.GetScore());
+            m_networks[idx].AddScore(game.GetScore());
         }
     }
 }

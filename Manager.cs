@@ -12,8 +12,8 @@ namespace Reinforcement
 {
     public partial class Manager : Form
     {
-        private const int blockSize = 48;
-        private const int height = 16, width = 16;
+        private const int blockSize = 20;
+        private const int height = 32, width = 32;
         private Label[][] board = new Label[height][];
         public static Random random = new Random();
         private SnakeGame game = new SnakeGame(height, width);
@@ -21,6 +21,10 @@ namespace Reinforcement
 
         public Manager()
         {
+            int[] layers = { 1, 8, 3 };
+            Population<SnakeGame> population = new Population<SnakeGame>(1000, layers, game);
+            population.IncrementGeneration();
+
             this.BackColor = Color.FromArgb(0, 0, 100);
             this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
             this.Text = "Snake";

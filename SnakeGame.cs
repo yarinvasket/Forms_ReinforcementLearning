@@ -210,6 +210,11 @@ namespace Reinforcement
             foodDuration = 0;
             starve = 150;
         }
+
+        public override Game GetNewGame()
+        {
+            return new SnakeGame(height, width);
+        }
     }
 
     public enum Block
