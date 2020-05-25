@@ -80,9 +80,9 @@ namespace Reinforcement
             input[active] = 1;
             game.Tick(input);
 
-            if (game.IsEnd() && !areCheatsEnabled)
+            if (game.isEnd && !areCheatsEnabled)
             {
-                MessageBox.Show("You lost!");
+                MessageBox.Show("You lost!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 game = new SnakeGame(height, width);
                 Block[,] blocks = game.GetBoard();
                 for (int i = 0; i < height; i++)

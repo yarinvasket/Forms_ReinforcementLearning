@@ -15,10 +15,11 @@ namespace Reinforcement
         private int foodX, foodY;
         private int foodDuration;
         private int starve;
-        private bool isEnd;
 
         public SnakeGame(int height, int width)
         {
+            inputAmount = 1;
+            outputAmount = 3;
             this.height = height;
             this.width = width;
             board = new Block[height, width];
@@ -55,37 +56,44 @@ namespace Reinforcement
             new SPoint(foodX, foodY)};
         }
 
-        public void GetInput()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetInputAmount()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetOutputAmount()
-        {
-            return 3;
-        }
-
-        public int GetScore()
+        public override int GetScore()
         {
             return snake.Count;
         }
 
-        public bool IsEnd()
+        public override float[] SetOutput()
         {
-            return isEnd;
+            //throw new NotImplementedException();
+            float[] output = new float[inputAmount];
+            LinkedListNode<SPoint> tmp = snake.Last;
+            int x = foodX - tmp.Value.x;
+            int y = tmp.Value.y - foodY;
+            int dx = tmp.Value.x - snake.Last.Previous.Value.x;
+            int dy = tmp.Value.y - snake.Last.Previous.Value.y;
+
+            if (dy < 0)
+            {
+                x = -x;
+                y = -y;
+            }
+            else if (dx > 0)
+            {
+                int temp = x;
+                x = y;
+                y = -temp;
+            }
+            else if (dx < 0)
+            {
+                int temp = x;
+                x = -y;
+                y = temp;
+            }
+
+            output[0] = (float)Math.Atan2(y, x);
+            return output;
         }
 
-        public float[] SetOutput()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Tick(float[] input)
+        public override void Tick(float[] input)
         {
             LinkedListNode<SPoint> last = snake.Last;
 
@@ -181,6 +189,26 @@ namespace Reinforcement
             board[foodPoint.y, foodPoint.x] = Block.Food;
             foodX = foodPoint.x;
             foodY = foodPoint.y;
+        }
+
+        public override void Reset()
+        {
+            board = new Block[height, width];
+
+            SPoint snakeLoc = new SPoint(Manager.random.Next(1, width - 1), Manager.random.Next(1, height - 1));
+            SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
+            board[snakeLoc.y, snakeLoc.x] = Block.Snake;
+            board[leftSnake.y, leftSnake.x] = Block.Snake;
+            snake = new LinkedList<SPoint>();
+            snake.AddLast(leftSnake);
+            snake.AddLast(snakeLoc);
+
+            GenFood();
+
+            isEnd = false;
+
+            foodDuration = 0;
+            starve = 150;
         }
     }
 

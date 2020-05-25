@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Reinforcement
 {
-    interface Game
+    public abstract class Game
     {
-        void Tick(float[] input);
-        int GetInputAmount();
-        int GetOutputAmount();
-        int GetScore();
-        bool IsEnd();
-        float[] SetOutput();
-        void GetInput();
+        public int inputAmount;
+        public int outputAmount;
+        public bool isEnd;
+
+        public abstract void Tick(float[] input);
+        public abstract int GetScore();
+        public abstract float[] SetOutput();
+        public abstract void Reset();
     }
 }
