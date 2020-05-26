@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Reinforcement
 {
     [Serializable]
-    class SPoint
+    public class SPoint
     {
         public int x, y;
 

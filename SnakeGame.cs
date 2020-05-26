@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Reinforcement
 {
     [Serializable]
-    class SnakeGame : Game
+    public class SnakeGame : Game
     {
         private int height, width;
         private Block[,] board;

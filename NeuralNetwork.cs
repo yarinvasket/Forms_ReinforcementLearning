@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,33 +116,64 @@ namespace Reinforcement
             }
         }
 
+        private NeuralNetwork() {}
+
         /// <summary>
         /// Takes another neural network and changes random values in it
         /// </summary>
         /// <param name="parent"></param>
         public NeuralNetwork(NeuralNetwork parent)
         {
-            //Copy
             m_layers = parent.m_layers;
             m_inputNeurons = new InputNeuron[parent.m_inputNeurons.Length];
             for (int i = 0; i < m_inputNeurons.Length; i++)
             {
-                m_inputNeurons[i] = new InputNeuron(parent.m_inputNeurons[i]);
+                m_inputNeurons[i] = InputNeuron.WithMutations(parent.m_inputNeurons[i]);
             }
             m_hiddenNeurons = new HiddenNeuron[parent.m_hiddenNeurons.Length][];
             for (int i = 0; i < m_hiddenNeurons.Length; i++)
             {
                 m_hiddenNeurons[i] = new HiddenNeuron[parent.m_hiddenNeurons[i].Length];
-                for (int j = 0; j < m_hiddenNeurons[i].Length; i++)
+                for (int j = 0; j < m_hiddenNeurons[i].Length; j++)
                 {
-                    m_hiddenNeurons[i][j] = new HiddenNeuron(parent.m_hiddenNeurons[i][j]);
+                    m_hiddenNeurons[i][j] = HiddenNeuron.WithMutations(parent.m_hiddenNeurons[i][j]);
                 }
             }
             m_outputNeurons = new OutputNeuron[parent.m_outputNeurons.Length];
             for (int i = 0; i < m_outputNeurons.Length; i++)
             {
-                m_outputNeurons[i] = new OutputNeuron(parent.m_outputNeurons[i]);
+                m_outputNeurons[i] = OutputNeuron.WithMutations(parent.m_outputNeurons[i]);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        public static NeuralNetwork NoMutations(NeuralNetwork parent)
+        {
+            NeuralNetwork ret = new NeuralNetwork();
+            ret.m_layers = parent.m_layers;
+            ret.m_inputNeurons = new InputNeuron[parent.m_inputNeurons.Length];
+            for (int i = 0; i < ret.m_inputNeurons.Length; i++)
+            {
+                ret.m_inputNeurons[i] = InputNeuron.NoMutations(parent.m_inputNeurons[i]);
+            }
+            ret.m_hiddenNeurons = new HiddenNeuron[parent.m_hiddenNeurons.Length][];
+            for (int i = 0; i < ret.m_hiddenNeurons.Length; i++)
+            {
+                ret.m_hiddenNeurons[i] = new HiddenNeuron[parent.m_hiddenNeurons[i].Length];
+                for (int j = 0; j < ret.m_hiddenNeurons[i].Length; j++)
+                {
+                    ret.m_hiddenNeurons[i][j] = HiddenNeuron.NoMutations(parent.m_hiddenNeurons[i][j]);
+                }
+            }
+            ret.m_outputNeurons = new OutputNeuron[parent.m_outputNeurons.Length];
+            for (int i = 0; i < ret.m_outputNeurons.Length; i++)
+            {
+                ret.m_outputNeurons[i] = OutputNeuron.NoMutations(parent.m_outputNeurons[i]);
+            }
+            return ret;
         }
 
         /// <summary>

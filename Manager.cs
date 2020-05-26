@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,19 +13,17 @@ namespace Reinforcement
 {
     public partial class Manager : Form
     {
-        private const int blockSize = 20;
-        private const int height = 32, width = 32;
-        private Label[][] board = new Label[height][];
+        protected const int blockSize = 25;
+        protected const int height = 20, width = 20;
+        protected Label[][] board = new Label[height][];
         public static Random random = new Random();
-        private SnakeGame game = new SnakeGame(height, width);
-        private bool areCheatsEnabled;
+        protected SnakeGame game = new SnakeGame(height, width);
+        protected bool areCheatsEnabled;
+        protected Button[] buttons;
+        protected Button toggleCheats;
 
         public Manager()
         {
-            int[] layers = { 1, 8, 3 };
-            Population<SnakeGame> population = new Population<SnakeGame>(1000, layers, game);
-            population.IncrementGeneration();
-
             this.BackColor = Color.FromArgb(0, 0, 100);
             this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
             this.Text = "Snake";
@@ -48,7 +47,7 @@ namespace Reinforcement
                 }
             }
 
-            Button[] buttons = new Button[3];
+            buttons = new Button[3];
             for (int i = 0; i < 3; i++)
             {
                 buttons[i] = new Button();
@@ -63,13 +62,18 @@ namespace Reinforcement
             buttons[1].Text = "Left";
             buttons[2].Text = "Right";
 
-            Button toggleCheats = new Button();
+            toggleCheats = new Button();
             toggleCheats.Location = new Point(6 * blockSize, width * blockSize);
             toggleCheats.Size = new Size(blockSize * 2, blockSize);
             toggleCheats.BackColor = Color.FromName("White");
             toggleCheats.Click += toggleCheat;
             toggleCheats.Text = "Toggle Cheats";
             Controls.Add(toggleCheats);
+
+            FormClosed += (object sender, FormClosedEventArgs e) =>
+            {
+                Environment.Exit(Environment.ExitCode);
+            };
         }
 
         public void buttonClick(object sender, EventArgs e)

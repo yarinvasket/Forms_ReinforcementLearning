@@ -10,17 +10,20 @@ namespace Reinforcement
     {
         public float value;
 
-        public static void PinchValue(ref float value, float range)
+        public static void Mutate(ref float value, float range)
         {
-            value += NeuralNetwork.GetRandomNeuronValue(range);
-            float bound = range * 5;
-            if (value > bound)
+            if (Manager.random.Next(0, 10) == 0)
             {
-                value = bound;
-            }
-            else if (value < -bound)
-            {
-                value = -bound;
+                value += NeuralNetwork.GetRandomNeuronValue(range);
+                float bound = range * 5;
+                if (value > bound)
+                {
+                    value = bound;
+                }
+                else if (value < -bound)
+                {
+                    value = -bound;
+                }
             }
         }
     }
@@ -38,17 +41,25 @@ namespace Reinforcement
         /// Copy with mutations
         /// </summary>
         /// <param name="other"></param>
-        public InputNeuron(InputNeuron other)
+        public static InputNeuron WithMutations(InputNeuron other)
         {
-            connections = new float[other.connections.Length];
-            for (int i = 0; i < connections.Length; i++)
+            InputNeuron ret = new InputNeuron(other.connections.Length);
+            for (int i = 0; i < ret.connections.Length; i++)
             {
-                connections[i] = other.connections[i];
-                if (Manager.random.Next(0, 10) == 0)
-                {
-                    PinchValue(ref connections[i], 0.2f);
-                }
+                ret.connections[i] = other.connections[i];
+                Mutate(ref ret.connections[i], 0.2f);
             }
+            return ret;
+        }
+
+        public static InputNeuron NoMutations(InputNeuron other)
+        {
+            InputNeuron ret = new InputNeuron(other.connections.Length);
+            for (int i = 0; i < ret.connections.Length; i++)
+            {
+                ret.connections[i] = other.connections[i];
+            }
+            return ret;
         }
 
         public float GetWeight(int idx)
@@ -72,22 +83,32 @@ namespace Reinforcement
         /// Copy with mutations
         /// </summary>
         /// <param name="other"></param>
-        public HiddenNeuron(HiddenNeuron other)
+        public static HiddenNeuron WithMutations(HiddenNeuron other)
         {
-            connections = new float[other.connections.Length];
-            for (int i = 0; i < connections.Length; i++)
+            HiddenNeuron ret = new HiddenNeuron(other.connections.Length, other.bias);
+            for (int i = 0; i < ret.connections.Length; i++)
             {
-                connections[i] = other.connections[i];
-                if (Manager.random.Next(0, 10) == 0)
-                {
-                    PinchValue(ref connections[i], 0.2f);
-                }
+                ret.connections[i] = other.connections[i];
+                Mutate(ref ret.connections[i], 0.2f);
             }
-            bias = other.bias;
-            if (Manager.random.Next(0, 10) == 0)
+            ret.bias = other.bias;
+            Mutate(ref ret.bias, 1);
+            return ret;
+        }
+
+        /// <summary>
+        /// Copy without mutations
+        /// </summary>
+        /// <param name="other"></param>
+        public static HiddenNeuron NoMutations(HiddenNeuron other)
+        {
+            HiddenNeuron ret = new HiddenNeuron(other.connections.Length, other.bias);
+            for (int i = 0; i < ret.connections.Length; i++)
             {
-                PinchValue(ref bias, 1);
+                ret.connections[i] = other.connections[i];
             }
+            ret.bias = other.bias;
+            return ret;
         }
 
         public void Sigmoid(float value)
@@ -114,13 +135,16 @@ namespace Reinforcement
         /// Copy with mutations
         /// </summary>
         /// <param name="other"></param>
-        public OutputNeuron(OutputNeuron other)
+        public static OutputNeuron WithMutations(OutputNeuron other)
         {
-            bias = other.bias;
-            if (Manager.random.Next(0, 10) == 0)
-            {
-                PinchValue(ref bias, 1);
-            }
+            OutputNeuron ret = new OutputNeuron(other.bias);
+            Mutate(ref ret.bias, 1);
+            return ret;
+        }
+
+        public static OutputNeuron NoMutations(OutputNeuron other)
+        {
+            return new OutputNeuron(other.bias);
         }
 
         public void Sigmoid(float value)
