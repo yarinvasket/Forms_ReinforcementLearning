@@ -15,16 +15,18 @@ namespace Reinforcement
         private int foodX, foodY;
         private int foodDuration;
         private int starve;
+        private Random random;
 
         public SnakeGame(int height, int width)
         {
-            inputAmount = 1;
+            inputAmount = 26;
             outputAmount = 3;
             this.height = height;
             this.width = width;
             board = new Block[height, width];
+            random = new Random();
 
-            SPoint snakeLoc = new SPoint(Manager.random.Next(1, width - 1), Manager.random.Next(1, height - 1));
+            SPoint snakeLoc = new SPoint(random.Next(1, width - 1), random.Next(1, height - 1));
             SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
             board[snakeLoc.y, snakeLoc.x] = Block.Snake;
             board[leftSnake.y, leftSnake.x] = Block.Snake;
@@ -63,27 +65,37 @@ namespace Reinforcement
 
         public override float[] SetOutput()
         {
-            //throw new NotImplementedException();
             float[] output = new float[inputAmount];
             LinkedListNode<SPoint> tmp = snake.Last;
             int x = foodX - tmp.Value.x;
             int y = tmp.Value.y - foodY;
-            int dx = tmp.Value.x - snake.Last.Previous.Value.x;
-            int dy = tmp.Value.y - snake.Last.Previous.Value.y;
+            int dx = tmp.Value.x - tmp.Previous.Value.x;
+            int dy = tmp.Value.y - tmp.Previous.Value.y;
 
+            //If the snake is heading up
+            if (dy > 0)
+            {
+                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x - 2, 1, 1);
+            }
+            //If the snake is heading down
             if (dy < 0)
             {
+                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x + 2, -1, -1);
                 x = -x;
                 y = -y;
             }
+            //If the snake is heading left
             else if (dx > 0)
             {
+                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x - 2, 1, -1);
                 int temp = x;
                 x = y;
                 y = -temp;
             }
-            else if (dx < 0)
+            //If the snake is heading right
+            else
             {
+                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x + 2, -1, 1);
                 int temp = x;
                 x = -y;
                 y = temp;
@@ -91,6 +103,34 @@ namespace Reinforcement
 
             output[0] = (float)Math.Atan2(y, x);
             return output;
+        }
+
+        public void EvaluateBoard(float[] arr, int startY, int startX, int dy, int dx)
+        {
+            int endY = startY + dy * 5;
+            for (int i = startY; i != endY; i += dy)
+            {
+                int row = dy > 0 ? (i - startY) * 5 : (startY - i) * 5;
+                if (i < 0 || i >= height)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        arr[row + j] = 1;
+                    }
+                    continue;
+                }
+                int endX = startX + dx * 5;
+                for (int j = startX; j != endX; j += dx)
+                {
+                    int column = dx > 0 ? j - startX : startX - j;
+                    if (j < 0 || j >= width)
+                    {
+                        arr[row + column] = 1;
+                        continue;
+                    }
+                    arr[row + column] = board[i, j] == Block.Snake ? 1 : 0;
+                }
+            }
         }
 
         public override void Tick(float[] input)
@@ -185,7 +225,7 @@ namespace Reinforcement
                 isEnd = true;
                 return;
             }
-            SPoint foodPoint = spaces[Manager.random.Next(0, spaces.Count)];
+            SPoint foodPoint = spaces[random.Next(0, spaces.Count)];
             board[foodPoint.y, foodPoint.x] = Block.Food;
             foodX = foodPoint.x;
             foodY = foodPoint.y;
@@ -195,7 +235,7 @@ namespace Reinforcement
         {
             board = new Block[height, width];
 
-            SPoint snakeLoc = new SPoint(Manager.random.Next(1, width - 1), Manager.random.Next(1, height - 1));
+            SPoint snakeLoc = new SPoint(random.Next(1, width - 1), random.Next(1, height - 1));
             SPoint leftSnake = new SPoint(snakeLoc.x - 1, snakeLoc.y);
             board[snakeLoc.y, snakeLoc.x] = Block.Snake;
             board[leftSnake.y, leftSnake.x] = Block.Snake;

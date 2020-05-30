@@ -37,7 +37,7 @@ namespace Reinforcement
             Controls.Remove(toggleCheats);
             toggleCheats = null;
 
-            int[] layers = { 1, 8, 3 };
+            int[] layers = { game.inputAmount, 8, game.outputAmount };
             population = new Population<SnakeGame>(populationSize, layers, game);
             Thread proceedGenerations = new Thread(() =>
             {
@@ -55,7 +55,7 @@ namespace Reinforcement
                 Location = new Point(blockSize / 2, blockSize / 2),
                 Text = population.generation.ToString(),
                 ForeColor = Color.White,
-                Font = new Font("Monospace", blockSize / 4),
+                Font = new Font(FontFamily.GenericMonospace, blockSize / 4),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             Controls.Add(generationLabel);
