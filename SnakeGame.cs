@@ -78,30 +78,30 @@ namespace Reinforcement
                 EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x - 2, 1, 1);
             }
             //If the snake is heading down
-            if (dy < 0)
+            else if (dy < 0)
             {
                 EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x + 2, -1, -1);
                 x = -x;
                 y = -y;
             }
-            //If the snake is heading left
+            //If the snake is heading right
             else if (dx > 0)
             {
-                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x - 2, 1, -1);
+                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x + 2, 1, -1);
                 int temp = x;
                 x = y;
                 y = -temp;
             }
-            //If the snake is heading right
+            //If the snake is heading left
             else
             {
-                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x + 2, -1, 1);
+                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x - 2, -1, 1);
                 int temp = x;
                 x = -y;
                 y = temp;
             }
 
-            output[0] = (float)Math.Atan2(y, x);
+            output[25] = (float)Math.Atan2(y, x);
             return output;
         }
 
