@@ -19,7 +19,7 @@ namespace Reinforcement
 
         public SnakeGame(int height, int width)
         {
-            inputAmount = 26;
+            inputAmount = 10;
             outputAmount = 3;
             this.height = height;
             this.width = width;
@@ -73,64 +73,139 @@ namespace Reinforcement
             int dy = tmp.Value.y - tmp.Previous.Value.y;
 
             //If the snake is heading up
-            if (dy > 0)
+            if (dy < 0)
             {
-                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x - 2, 1, 1);
+                int startY = tmp.Value.y - 1;
+                int startX = tmp.Value.x - 1;
+                int endY = startY + 3;
+                int endX = startX + 3;
+                for (int i = startY; i < endY; i++)
+                {
+                    int row = (i - startY) * 3;
+                    if (i < 0 || i >= height)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            output[row + j] = 1;
+                        }
+                        continue;
+                    }
+                    for (int j = startX; j < endX; j++)
+                    {
+                        int column = j - startX;
+                        if (j < 0 || j >= width)
+                        {
+                            output[row + column] = 1;
+                            continue;
+                        }
+                        output[row + column] = board[i, j] == Block.Snake ? 1 : 0;
+                    }
+                }
             }
             //If the snake is heading down
-            else if (dy < 0)
+            else if (dy > 0)
             {
-                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x + 2, -1, -1);
+                int startY = tmp.Value.y + 1;
+                int startX = tmp.Value.x + 1;
+                int endY = startY - 3;
+                int endX = startX - 3;
+                for (int i = startY; i > endY; i--)
+                {
+                    int row = (startY - i) * 3;
+                    if (i < 0 || i >= height)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            output[row + j] = 1;
+                        }
+                        continue;
+                    }
+                    for (int j = startX; j > endX; j--)
+                    {
+                        int column = startX - j;
+                        if (j < 0 || j >= width)
+                        {
+                            output[row + column] = 1;
+                            continue;
+                        }
+                        output[row + column] = board[i, j] == Block.Snake ? 1 : 0;
+                    }
+                }
+
                 x = -x;
                 y = -y;
             }
             //If the snake is heading right
             else if (dx > 0)
             {
-                EvaluateBoard(output, tmp.Value.y - 2, tmp.Value.x + 2, 1, -1);
-                int temp = x;
-                x = y;
-                y = -temp;
-            }
-            //If the snake is heading left
-            else
-            {
-                EvaluateBoard(output, tmp.Value.y + 2, tmp.Value.x - 2, -1, 1);
+                int startY = tmp.Value.x + 1;
+                int startX = tmp.Value.y - 1;
+                int endY = startY - 3;
+                int endX = startX + 3;
+                for (int i = startY; i > endY; i--)
+                {
+                    int row = (startY - i) * 3;
+                    if (i < 0 || i >= width)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            output[row + j] = 1;
+                        }
+                        continue;
+                    }
+                    for (int j = startX; j < endX; j++)
+                    {
+                        int column = j - startX;
+                        if (j < 0 || j >= height)
+                        {
+                            output[row + column] = 1;
+                            continue;
+                        }
+                        output[row + column] = board[j, i] == Block.Snake ? 1 : 0;
+                    }
+                }
+
                 int temp = x;
                 x = -y;
                 y = temp;
             }
-
-            output[25] = (float)Math.Atan2(y, x);
-            return output;
-        }
-
-        public void EvaluateBoard(float[] arr, int startY, int startX, int dy, int dx)
-        {
-            int endY = startY + dy * 5;
-            for (int i = startY; i != endY; i += dy)
+            //If the snake is heading left
+            else
             {
-                int row = dy > 0 ? (i - startY) * 5 : (startY - i) * 5;
-                if (i < 0 || i >= height)
+                int startY = tmp.Value.x - 1;
+                int startX = tmp.Value.y + 1;
+                int endY = startY + 3;
+                int endX = startX - 3;
+                for (int i = startY; i < endY; i++)
                 {
-                    for (int j = 0; j < 5; j++)
+                    int row = (i - startY) * 3;
+                    if (i < 0 || i >= width)
                     {
-                        arr[row + j] = 1;
-                    }
-                    continue;
-                }
-                int endX = startX + dx * 5;
-                for (int j = startX; j != endX; j += dx)
-                {
-                    int column = dx > 0 ? j - startX : startX - j;
-                    if (j < 0 || j >= width)
-                    {
-                        arr[row + column] = 1;
+                        for (int j = 0; j < 3; j++)
+                        {
+                            output[row + j] = 1;
+                        }
                         continue;
                     }
-                    arr[row + column] = board[i, j] == Block.Snake ? 1 : 0;
+                    for (int j = startX; j > endX; j--)
+                    {
+                        int column = startX - j;
+                        if (j < 0 || j >= width)
+                        {
+                            output[row + column] = 1;
+                            continue;
+                        }
+                        output[row + column] = board[j, i] == Block.Snake ? 1 : 0;
+                    }
                 }
+
+                int temp = x;
+                x = y;
+                y = -temp;
             }
+
+            output[9] = (float)Math.Atan2(y, x);
+            return output;
         }
 
         public override void Tick(float[] input)

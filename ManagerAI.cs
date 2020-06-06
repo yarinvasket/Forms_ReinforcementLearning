@@ -37,7 +37,7 @@ namespace Reinforcement
             Controls.Remove(toggleCheats);
             toggleCheats = null;
 
-            int[] layers = { game.inputAmount, 8, 8, game.outputAmount };
+            int[] layers = { game.inputAmount, 10, game.outputAmount };
             population = new Population<SnakeGame>(populationSize, layers, game);
             Thread proceedGenerations = new Thread(() =>
             {

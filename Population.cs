@@ -18,7 +18,7 @@ namespace Reinforcement
         private CompareNetworks comparer;
         private Thread[] threads;
         private bool started = false;
-        public const int CPUs = 4;
+        public const int CPUs = 8;
 
         public Population(int popSize, int[] layers, T game)
         {
