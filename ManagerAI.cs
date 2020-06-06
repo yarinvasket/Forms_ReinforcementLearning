@@ -87,6 +87,7 @@ namespace Reinforcement
             }
             else
             {
+                Text = "Score - " + game.GetScore();
                 game = new SnakeGame(height, width);
                 Block[,] blocks = game.GetBoard();
                 for (int i = 0; i < height; i++)
