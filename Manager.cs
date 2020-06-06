@@ -25,7 +25,7 @@ namespace Reinforcement
         public Manager()
         {
             this.BackColor = Color.FromArgb(0, 0, 100);
-            this.Size = new Size(blockSize * width + blockSize / 3, blockSize * height + (int)(blockSize / 1.25));
+            this.Size = new Size(blockSize * width + blockSize, blockSize * height + blockSize * 2);
             this.Text = "Snake";
             Block[,] blocks = game.GetBoard();
             areCheatsEnabled = false;

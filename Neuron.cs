@@ -47,7 +47,7 @@ namespace Reinforcement
             for (int i = 0; i < ret.connections.Length; i++)
             {
                 ret.connections[i] = other.connections[i];
-                Mutate(ref ret.connections[i], 0.2f);
+                Mutate(ref ret.connections[i], 0.4f);
             }
             return ret;
         }
@@ -89,10 +89,10 @@ namespace Reinforcement
             for (int i = 0; i < ret.connections.Length; i++)
             {
                 ret.connections[i] = other.connections[i];
-                Mutate(ref ret.connections[i], 0.2f);
+                Mutate(ref ret.connections[i], 0.4f);
             }
             ret.bias = other.bias;
-            Mutate(ref ret.bias, 1);
+            Mutate(ref ret.bias, 2);
             return ret;
         }
 
@@ -138,7 +138,7 @@ namespace Reinforcement
         public static OutputNeuron WithMutations(OutputNeuron other)
         {
             OutputNeuron ret = new OutputNeuron(other.bias);
-            Mutate(ref ret.bias, 1);
+            Mutate(ref ret.bias, 2);
             return ret;
         }
 

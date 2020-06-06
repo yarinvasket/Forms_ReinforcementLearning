@@ -19,7 +19,7 @@ namespace Reinforcement
 
         public SnakeGame(int height, int width)
         {
-            inputAmount = 10;
+            inputAmount = 26;
             outputAmount = 3;
             this.height = height;
             this.width = width;
@@ -71,8 +71,8 @@ namespace Reinforcement
             int y = tmp.Value.y - foodY;
             int dx = tmp.Value.x - tmp.Previous.Value.x;
             int dy = tmp.Value.y - tmp.Previous.Value.y;
-            const int bk = 1;
-            const int area = 3;
+            const int bk = 2;
+            const int area = 5;
 
             //If the snake is heading up
             if (dy < 0)
@@ -206,7 +206,7 @@ namespace Reinforcement
                 y = -temp;
             }
 
-            output[9] = (float)Math.Atan2(y, x);
+            output[25] = (float)Math.Atan2(y, x);
             return output;
         }
 
@@ -287,25 +287,16 @@ namespace Reinforcement
 
         public void GenFood()
         {
-            List<SPoint> spaces = new List<SPoint>();
+            foodX = random.Next(0, width);
+            foodY = random.Next(0, height);
 
-            for (int i = 0; i < height; i++)
+            if (board[foodY, foodX] != Block.Blank)
             {
-                for (int j = 0; j < width; j++)
-                {
-                    if (board[i, j] == Block.Blank) spaces.Add(new SPoint(j, i));
-                }
-            }
-
-            if (spaces.Count == 0)
-            {
-                isEnd = true;
+                GenFood();
                 return;
             }
-            SPoint foodPoint = spaces[random.Next(0, spaces.Count)];
-            board[foodPoint.y, foodPoint.x] = Block.Food;
-            foodX = foodPoint.x;
-            foodY = foodPoint.y;
+
+            board[foodY, foodX] = Block.Food;
         }
 
         public override void Reset()
