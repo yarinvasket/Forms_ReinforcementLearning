@@ -90,13 +90,17 @@ namespace Reinforcement
         public void TestNetwork(int idx, int cpu)
         {
             T game = m_games[cpu];
-            game.Reset();
-
-            while (!game.isEnd)
+            
+            for (int i = 0; i < 2; i++)
             {
-                game.Tick(m_networks[idx].FeedForward(game.SetOutput()));
+                game.Reset();
+
+                while (!game.isEnd)
+                {
+                    game.Tick(m_networks[idx].FeedForward(game.SetOutput()));
+                }
+                m_networks[idx].AddScore(game.GetScore());
             }
-            m_networks[idx].AddScore(game.GetScore());
         }
 
         public NeuralNetwork GetBestNeuralNetwork()

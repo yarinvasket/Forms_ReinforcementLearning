@@ -71,20 +71,22 @@ namespace Reinforcement
             int y = tmp.Value.y - foodY;
             int dx = tmp.Value.x - tmp.Previous.Value.x;
             int dy = tmp.Value.y - tmp.Previous.Value.y;
+            const int bk = 1;
+            const int area = 3;
 
             //If the snake is heading up
             if (dy < 0)
             {
-                int startY = tmp.Value.y - 1;
-                int startX = tmp.Value.x - 1;
-                int endY = startY + 3;
-                int endX = startX + 3;
+                int startY = tmp.Value.y - bk;
+                int startX = tmp.Value.x - bk;
+                int endY = startY + area;
+                int endX = startX + area;
                 for (int i = startY; i < endY; i++)
                 {
-                    int row = (i - startY) * 3;
+                    int row = (i - startY) * area;
                     if (i < 0 || i >= height)
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < area; j++)
                         {
                             output[row + j] = 1;
                         }
@@ -105,16 +107,16 @@ namespace Reinforcement
             //If the snake is heading down
             else if (dy > 0)
             {
-                int startY = tmp.Value.y + 1;
-                int startX = tmp.Value.x + 1;
-                int endY = startY - 3;
-                int endX = startX - 3;
+                int startY = tmp.Value.y + bk;
+                int startX = tmp.Value.x + bk;
+                int endY = startY - area;
+                int endX = startX - area;
                 for (int i = startY; i > endY; i--)
                 {
-                    int row = (startY - i) * 3;
+                    int row = (startY - i) * area;
                     if (i < 0 || i >= height)
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < area; j++)
                         {
                             output[row + j] = 1;
                         }
@@ -138,16 +140,16 @@ namespace Reinforcement
             //If the snake is heading right
             else if (dx > 0)
             {
-                int startY = tmp.Value.x + 1;
-                int startX = tmp.Value.y - 1;
-                int endY = startY - 3;
-                int endX = startX + 3;
+                int startY = tmp.Value.x + bk;
+                int startX = tmp.Value.y - bk;
+                int endY = startY - area;
+                int endX = startX + area;
                 for (int i = startY; i > endY; i--)
                 {
-                    int row = (startY - i) * 3;
+                    int row = (startY - i) * area;
                     if (i < 0 || i >= width)
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < area; j++)
                         {
                             output[row + j] = 1;
                         }
@@ -172,16 +174,16 @@ namespace Reinforcement
             //If the snake is heading left
             else
             {
-                int startY = tmp.Value.x - 1;
-                int startX = tmp.Value.y + 1;
-                int endY = startY + 3;
-                int endX = startX - 3;
+                int startY = tmp.Value.x - bk;
+                int startX = tmp.Value.y + bk;
+                int endY = startY + area;
+                int endX = startX - area;
                 for (int i = startY; i < endY; i++)
                 {
-                    int row = (i - startY) * 3;
+                    int row = (i - startY) * area;
                     if (i < 0 || i >= width)
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < area; j++)
                         {
                             output[row + j] = 1;
                         }
