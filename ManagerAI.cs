@@ -100,5 +100,14 @@ namespace Reinforcement
                 generationLabel.Text = population.generation.ToString();
             }
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Space)
+            {
+                game.isEnd = true;
+            }
+            return false;
+        }
     }
 }
