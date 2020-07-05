@@ -18,7 +18,7 @@ namespace Reinforcement
         private CompareNetworks comparer;
         private Thread[] threads;
         private bool started = false;
-        public const int CPUs = 8;
+        public static int CPUs = Environment.ProcessorCount;
 
         public Population(int popSize, int[] layers, T game)
         {
